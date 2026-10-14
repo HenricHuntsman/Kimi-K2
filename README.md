@@ -145,7 +145,7 @@ python3 kimi_forge_unified.py
 **Option 2: Build THE FORGE**
 ```bash
 # Clone and build
-git clone https://github.com/SpidermanTotro/Kimi-K2.git
+git clone https://github.com/HenricHuntsman/Kimi-K2.git
 cd Kimi-K2
 make all                    # Build entire system
 make dist                   # Create distribution package
