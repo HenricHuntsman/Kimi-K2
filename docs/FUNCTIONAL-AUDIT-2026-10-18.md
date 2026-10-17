@@ -63,3 +63,7 @@ Stage remains **prototype**. Existing upstream Kimi model documentation is separ
 6. Expand real tools only after one end-to-end local workflow passes.
 
 No runtime code was changed by this audit; failures remain open. Tests did not exercise CUDA, actual Kimi weights, Ghidra, media processing, containers, external providers or production deployment.
+
+## Recovery follow-up
+
+Subsequent implementation repairs the reproduced CLI/REST statistics and documentation faults, reports demo status/empty executable tools, removes fixed quality scores, and rejects invalid payloads before session changes. The npm test entry now runs Python unittest instead of printing success. Unimplemented language manifests are preserved as design material under `docs/design-manifests/`. Added seven regressions; the combined suite passes 19 tests locally. Earlier failing observations above remain evidence of the audited base, not a claim those paths are still broken after the recovery commit.

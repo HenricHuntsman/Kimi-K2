@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-THE FORGE AI - Production Server
-Complete working implementation with REST API
+FORGE Integration Lab - legacy demonstration REST server
+Documentation/session helpers; no model inference or executable tool integration.
 """
 
 import os
@@ -99,9 +99,9 @@ def chat():
         return jsonify({'error': 'THE FORGE not initialized'}), 503
     
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True)
         
-        if not data or 'message' not in data:
+        if not isinstance(data, dict) or not isinstance(data.get('message'), str) or not isinstance(data.get('session_id', 'default'), str):
             return jsonify({'error': 'Message is required'}), 400
         
         message = data['message']
@@ -134,9 +134,9 @@ def chat():
         
         forge_response = ForgeResponse(
             content=response_content,
-            capabilities_used=capabilities,
+            capabilities_used=[],
             suggestions=suggestions,
-            status='success',
+            status='demonstration',
             session_id=session_id
         )
         
@@ -154,16 +154,12 @@ def get_capabilities():
         return jsonify({'error': 'THE FORGE not initialized'}), 503
     
     try:
-        capabilities = forge.get_all_capabilities()
-        categories = {}
-        
-        if hasattr(forge, 'get_capability_categories'):
-            categories = forge.get_capability_categories()
-        
         return jsonify({
-            'total_capabilities': len(capabilities),
-            'capabilities': capabilities,
-            'categories': categories
+            'total_capabilities': 0,
+            'capabilities': [],
+            'categories': {},
+            'status': 'demonstration',
+            'model_loaded': False
         })
     except Exception as e:
         logger.error(f"Error getting capabilities: {e}")
@@ -194,17 +190,12 @@ def get_documentation():
         return jsonify({'error': 'THE FORGE not initialized'}), 503
     
     try:
-        docs = []
-        total_size = 0
-        
-        if hasattr(forge, 'documents'):
-            docs = forge.documents
-            total_size = sum(len(doc['content']) for doc in forge.documents)
-        
+        docs = [{'filename': name, 'content': content, 'size': len(content)}
+                for name, content in sorted(forge.loader.documents.items())]
         return jsonify({
             'documents': docs,
             'total_files': len(docs),
-            'total_size': total_size
+            'total_size': sum(doc['size'] for doc in docs)
         })
     except Exception as e:
         logger.error(f"Error getting documentation: {e}")
@@ -251,9 +242,9 @@ def code_review():
         return jsonify({'error': 'THE FORGE not initialized'}), 503
     
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True)
         
-        if not data or 'code' not in data:
+        if not isinstance(data, dict) or not isinstance(data.get('code'), str):
             return jsonify({'error': 'Code is required'}), 400
         
         code = data['code']
@@ -281,12 +272,13 @@ def code_review():
         suggestions.append('Consider adding docstrings to functions')
         
         return jsonify({
-            'status': 'complete',
+            'status': 'limited_analysis',
             'language': language,
             'lines_reviewed': len(code.split('\n')),
             'issues': issues,
             'suggestions': suggestions,
-            'quality_score': 85
+            'quality_score': None,
+            'assessment': 'limited_text_heuristics'
         })
         
     except Exception as e:
@@ -309,9 +301,9 @@ def analyze_book():
         return jsonify({'error': 'THE FORGE not initialized'}), 503
     
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True)
         
-        if not data or 'content' not in data:
+        if not isinstance(data, dict) or not isinstance(data.get('content'), str):
             return jsonify({'error': 'Content is required'}), 400
         
         content = data['content']
@@ -322,20 +314,21 @@ def analyze_book():
         paragraph_count = len([p for p in content.split('\n\n') if p.strip()])
         
         return jsonify({
-            'status': 'complete',
+            'status': 'limited_analysis',
             'genre': genre,
             'statistics': {
                 'word_count': word_count,
                 'paragraph_count': paragraph_count,
                 'estimated_pages': word_count // 250
             },
-            'quality_score': 78,
+            'quality_score': None,
+            'assessment': 'word_and_paragraph_counts_only',
             'suggestions': [
-                'Consider adding more descriptive imagery',
-                'Dialogue could be more natural',
-                'Pacing is good overall'
+                'Imagery has not been evaluated',
+                'Dialogue quality has not been evaluated',
+                'Pacing has not been evaluated'
             ],
-            'sequel_potential': 'High - multiple plot threads remain open'
+            'sequel_potential': None
         })
         
     except Exception as e:
@@ -353,13 +346,10 @@ def get_stats():
         total_sessions = len(conversation_history)
         total_messages = sum(len(msgs) for msgs in conversation_history.values())
         
-        total_files = 0
-        total_size = 0
-        
-        if hasattr(forge, 'documents'):
-            total_files = len(forge.documents)
-            total_size = sum(len(doc['content']) for doc in forge.documents)
-        
+        documentation = forge.get_documentation_stats()
+        total_files = documentation['total_documents']
+        total_size = documentation['total_characters']
+
         return jsonify({
             'system': {
                 'status': 'running',
@@ -369,7 +359,7 @@ def get_stats():
             'documentation': {
                 'files_loaded': total_files,
                 'total_size': total_size,
-                'capabilities': len(forge.get_all_capabilities())
+                'capabilities': 0
             },
             'sessions': {
                 'total_sessions': total_sessions,
@@ -437,7 +427,7 @@ if __name__ == '__main__':
     logger.info(f"🔍 Health check: http://localhost:{port}/health")
     
     app.run(
-        host='0.0.0.0',
+        host='127.0.0.1',
         port=port,
         debug=False,
         threaded=True

@@ -62,3 +62,9 @@ Install Flask before running `make test` (for example in a virtual environment w
 ## Direct functional audit
 
 [Executed audit — 18 October 2026](docs/FUNCTIONAL-AUDIT-2026-10-18.md): documentation, prompt/config export, basic CLI history and source-ZIP packaging work within their stated limits. CLI `/stats` and `/caps` and two older REST endpoints fail on a missing API. Node build fails because its entry point is absent; `npm test` only prints a success message. These remain repair tasks, not working features.
+
+## Recovery pass: CLI/REST and component separation
+
+The audit above is a historical snapshot. `/stats` and `/caps` now use the actual documentation API; legacy REST statistics, capabilities and documentation routes no longer call nonexistent methods. Chat explicitly reports a demonstration; text-analysis routes retain basic counts/keyword checks without invented quality scores or sequel predictions. The legacy server now defaults to loopback.
+
+`npm test` now runs the real Python suite (install Flask and Flask-CORS in your active environment first). `npm run build` and `npm start` explicitly report that no Node application is implemented. Rust/C++/Go manifests are preserved under `docs/design-manifests/`, separate from the runnable Python prototype. Nineteen local tests passed through `make test`; real inference remains unimplemented.

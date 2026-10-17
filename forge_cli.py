@@ -203,48 +203,19 @@ class ForgeCLI:
                 f"Your request: {message}")
         
     def show_stats(self):
-        """Show system statistics"""
-        print()
-        print("=" * 70)
-        print("📊 THE FORGE AI Statistics")
-        print("=" * 70)
-        print()
-        
-        if hasattr(self.forge, 'documents'):
-            print(f"Documentation files loaded: {len(self.forge.documents)}")
-            print(f"Total capabilities: {len(self.forge.get_all_capabilities())}")
-        else:
-            print(f"Total capabilities: {len(self.forge.get_all_capabilities())}")
-        
+        """Show measured documentation/session statistics, not invented tools."""
+        stats = self.forge.get_documentation_stats()
+        print(f"Documentation entries loaded: {stats['total_documents']}")
+        print(f"Combined documentation characters: {stats['total_characters']}")
+        print("Implemented executable tools: 0; model loaded: no (demo)")
         print(f"Messages in session: {len(self.session_history)}")
         print(f"Current mode: {self.current_mode}")
-        print()
-        
-        # Show documentation breakdown
-        if hasattr(self.forge, 'documents'):
-            print("📚 Loaded Documentation:")
-            for doc in self.forge.documents:
-                size_kb = len(doc['content']) / 1024
-                print(f"  ✅ {doc['filename']: <35} {size_kb:>8.1f} KB")
-            print()
-        
+
     def show_capabilities(self):
-        """Show all capabilities"""
-        capabilities = self.forge.get_all_capabilities()
-        
-        print()
-        print("=" * 70)
-        print(f"🎯 THE FORGE AI Capabilities ({len(capabilities)} total)")
-        print("=" * 70)
-        print()
-        
-        for cap in capabilities[:20]:  # Show first 20
-            print(f"  ✅ {cap}")
-        
-        if len(capabilities) > 20:
-            print(f"  ... and {len(capabilities) - 20} more")
-        print()
-        
+        """Distinguish documentation proposals from implemented tools."""
+        print("Implemented executable tools: 0")
+        print("Documentation contains historical proposals, not executable capabilities.")
+
     def change_mode(self, command: str):
         """Change interaction mode"""
         parts = command.split()
