@@ -1,3 +1,5 @@
+> Historical documentation input. Capability counts, benchmark gains, OS/media tools and completion claims below are unverified. See [current qualification](../README.md). The current model/tool wrapper is simulated.
+
 ## Tool Calling
 To enable the tool calling feature, you may need to set certain tool calling parser options when starting the service. See [deploy_guidance](./deploy_guidance.md) for details.
 In Kimi-K2, a tool calling process includes:

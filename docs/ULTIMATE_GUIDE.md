@@ -1,3 +1,5 @@
+> Historical documentation input. Capability counts, benchmark gains, OS/media tools and completion claims below are unverified. See [current qualification](../README.md). The current model/tool wrapper is simulated.
+
 # 🔥 THE ULTIMATE GUIDE TO KIMI K2 / THE FORGE AI 🔥
 
 ```

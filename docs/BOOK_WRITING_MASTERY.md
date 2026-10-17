@@ -1,3 +1,5 @@
+> Historical documentation input. Capability counts, benchmark gains, OS/media tools and completion claims below are unverified. See [current qualification](../README.md). The current model/tool wrapper is simulated.
+
 # THE FORGE AI - Advanced Book Writing & Publishing Platform
 
 ## 📚 Professional Author-to-Publisher Platform

@@ -1,3 +1,5 @@
+> Historical documentation input. Capability counts, benchmark gains, OS/media tools and completion claims below are unverified. See [current qualification](../README.md). The current model/tool wrapper is simulated.
+
 # Kimi K2 Skills and Examples Guide
 
 This guide demonstrates Kimi K2's powerful AI capabilities through practical before-and-after examples and real-world coding scenarios. Learn how to leverage Kimi K2's agentic intelligence for various development tasks.

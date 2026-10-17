@@ -1,3 +1,5 @@
+> Historical documentation input. Capability counts, benchmark gains, OS/media tools and completion claims below are unverified. See [current qualification](../README.md). The current model/tool wrapper is simulated.
+
 # Quick Start Examples for Kimi K2
 
 This guide provides simple, ready-to-run examples to get started with Kimi K2 quickly. Perfect for developers who want to see the AI in action immediately.
