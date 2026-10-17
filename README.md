@@ -12,7 +12,7 @@ A prototype lab containing Python documentation loaders, prompt/config exporters
 | Simulated model | `KimiK2Model.generate` in `kimi_forge_unified.py` builds a canned response and selects tools by keywords |
 | Simulated tools | `ForgeToolRegistry.execute_tool` returns a success-shaped dictionary; it does not invoke the listed media/OS implementations |
 | Demonstration UI | `forge_gui.py` contains fixed code-review, book-analysis and upscaling result strings |
-| Source packaging | `build_system.py` creates a ZIP and checksums; its video-editor and Linux-OS build steps only print messages |
+| Source packaging | `build_system.py` creates a ZIP and checksums; its unimplemented video-editor and Linux-OS steps now fail explicitly |
 | Improvement estimates | `kimi_enhancement_toolkit.py` uses hard-coded estimated gains, not measured benchmark runs |
 
 **A source ZIP is not a bootable Linux ISO.** No bootable distribution, professional video editor, ten-million-film database, 1,450 working tools, trained Kimi model, or measured benchmark gain is established by this code review. The earlier advertised counts and completion percentages are withdrawn as project-status claims.
@@ -46,3 +46,9 @@ This checks syntax only. It does not run inference or validate application behav
 Upstream model reference: [Moonshot AI / Kimi-K2](https://github.com/moonshotai/Kimi-K2). Preserve the existing [LICENSE](LICENSE), upstream authorship and model terms. This lab is not an official Moonshot release.
 
 *Reviewed 18 October 2026. Source inspection and archive-integrity checks do not establish model/runtime qualification.*
+
+## Prototype integrity checks
+
+The model wrapper now labels responses as demonstrations, reports no loaded checkpoint, leaves confidence unset, and marks tool results `not_implemented` with `executed: false`. Registry definitions are counted separately from executable tools. `build_all` fails on unimplemented video/OS work and does not publish a source ZIP as a completed full build.
+
+`make test` runs syntax checks and six regression tests, and propagates failures. These tests passed locally and failed against the old implementation; a malformed-source check also returned nonzero. A Python 3.11/3.14 workflow has been added. This does not implement inference, media editing or Linux image creation. Other demonstration GUI result strings and benchmark estimates still need reconciliation.

@@ -32,7 +32,8 @@ build: setup
 
 test:
 	@echo "🧪 Testing THE FORGE..."
-	@python3 -m py_compile *.py 2>/dev/null || true
+	@python3 -m py_compile *.py
+	@python3 -m unittest discover -s tests -v
 	@echo "✅ Tests passed"
 
 clean:

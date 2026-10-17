@@ -72,15 +72,15 @@ class ForgeBuilder:
             if (self.project_root / f).exists():
                 print(f"   ✓ {f}")
             else:
-                print(f"   ⚠ {f} missing")
+                raise FileNotFoundError(f"Required source file missing: {f}")
     
     def build_video_editor(self):
         """Build video editor components"""
-        print("   Video editor components ready")
+        raise NotImplementedError("Video editor build is not implemented; no editor was built")
         
     def build_linux_os(self):
         """Prepare Linux OS builder"""
-        print("   Linux OS builder ready")
+        raise NotImplementedError("Linux image build is not implemented; no ISO was created")
         
     def build_documentation(self):
         """Compile all documentation"""
