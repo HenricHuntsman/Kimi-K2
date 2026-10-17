@@ -1,3 +1,5 @@
+> Historical prototype/design note. See [current README](README.md): model/tool execution is simulated, Linux-builder steps print messages, and benchmark gains are unmeasured. Claims below are not current qualification.
+
 # THE FORGE - Builder Documentation
 
 ## Quick Start

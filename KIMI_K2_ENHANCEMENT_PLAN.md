@@ -1,3 +1,5 @@
+> Historical prototype/design note. See [current README](README.md): model/tool execution is simulated, Linux-builder steps print messages, and benchmark gains are unmeasured. Claims below are not current qualification.
+
 # Kimi K2 Enhancement Plan - Achieving Higher Benchmark Scores
 
 ## 🎯 Goal: Help Kimi K2 Evolve and Achieve Top Performance
