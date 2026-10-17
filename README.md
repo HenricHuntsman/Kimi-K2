@@ -58,3 +58,7 @@ The model wrapper now labels responses as demonstrations, reports no loaded chec
 The GUI now reads documentation through the real loader API, reports zero implemented capabilities, identifies chat as a demo echo, returns HTTP 501 for known unimplemented tools and 404 for unknown tools, and rejects malformed chat payloads with HTTP 400. No code-review scores, upscaling gains or video-edit completion are fabricated. Its startup entry binds to loopback without debug.
 
 Install Flask before running `make test` (for example in a virtual environment with `python -m pip install Flask==3.1.2`). The combined suite passes 12 tests locally, including route and startup-configuration checks. The original GUI failed the new route checks. These are synthetic/local tests, not live inference or production-server qualification.
+
+## Direct functional audit
+
+[Executed audit — 18 October 2026](docs/FUNCTIONAL-AUDIT-2026-10-18.md): documentation, prompt/config export, basic CLI history and source-ZIP packaging work within their stated limits. CLI `/stats` and `/caps` and two older REST endpoints fail on a missing API. Node build fails because its entry point is absent; `npm test` only prints a success message. These remain repair tasks, not working features.
