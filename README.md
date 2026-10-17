@@ -68,3 +68,7 @@ Install Flask before running `make test` (for example in a virtual environment w
 The audit above is a historical snapshot. `/stats` and `/caps` now use the actual documentation API; legacy REST statistics, capabilities and documentation routes no longer call nonexistent methods. Chat explicitly reports a demonstration; text-analysis routes retain basic counts/keyword checks without invented quality scores or sequel predictions. The legacy server now defaults to loopback.
 
 `npm test` now runs the real Python suite (install Flask and Flask-CORS in your active environment first). `npm run build` and `npm start` explicitly report that no Node application is implemented. Rust/C++/Go manifests are preserved under `docs/design-manifests/`, separate from the runnable Python prototype. Nineteen local tests passed through `make test`; real inference remains unimplemented.
+
+## Folder organisation and recovery
+
+See the [project and folder guide](docs/PROJECT-GUIDE.md) for preserved material, verified limits and the next milestone.
