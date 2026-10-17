@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-THE FORGE - Complete Build System
-Builds entire project with all components
-"""
+"""Prototype source packaging; full media/OS builds remain unimplemented."""
 
 import os
 import sys
@@ -13,7 +10,7 @@ from pathlib import Path
 from datetime import datetime
 
 class ForgeBuilder:
-    """Complete build system for THE FORGE"""
+    """Source packager with explicit failures for unimplemented components."""
     
     def __init__(self):
         self.project_root = Path(__file__).parent
@@ -87,26 +84,31 @@ class ForgeBuilder:
         print("   Documentation ready")
         
     def create_distribution(self):
-        """Create downloadable distribution"""
-        print("   Creating distribution package...")
-        
-        zip_name = f"THE_FORGE_v1.0_{datetime.now().strftime('%Y%m%d')}.zip"
+        """Package prototype sources, dependencies and UI assets, not an OS."""
+        required = ["forge_implementation.py", "forge_server.py", "forge_cli.py",
+                    "forge_gui.py", "requirements.txt", "README.md", "LICENSE"]
+        for name in required:
+            if not (self.project_root / name).is_file():
+                raise FileNotFoundError(f"Required package input missing: {name}")
+        self.dist_dir.mkdir(parents=True, exist_ok=True)
+        zip_name = f"FORGE_prototype_source_{datetime.now().strftime('%Y%m%d')}.zip"
         zip_path = self.dist_dir / zip_name
         
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            # Add all Python files
-            for py_file in self.project_root.glob("*.py"):
-                zipf.write(py_file, py_file.name)
-            
-            # Add docs
-            docs_dir = self.project_root / "docs"
-            if docs_dir.exists():
-                for doc_file in docs_dir.glob("*.md"):
-                    zipf.write(doc_file, f"docs/{doc_file.name}")
-            
-            # Add README
-            if (self.project_root / "README.md").exists():
-                zipf.write(self.project_root / "README.md", "README.md")
+            inputs = set(self.project_root.glob("*.py"))
+            inputs.update(self.project_root / name for name in required)
+            inputs.update(self.project_root / name for name in
+                          ("Makefile", "package.json", "forge_knowledge_base.json",
+                           "forge_vllm_config.json"))
+            for folder in ("docs", "templates", "static", "tests"):
+                inputs.update((self.project_root / folder).rglob("*"))
+            for path in sorted(inputs):
+                relative = path.relative_to(self.project_root)
+                if (path.is_file() and not path.is_symlink()
+                        and not any(part.startswith(".") or part == "__pycache__"
+                                    for part in relative.parts)
+                        and path.suffix not in (".pyc", ".pyo")):
+                    zipf.write(path, relative.as_posix())
         
         print(f"   ✓ Created: {zip_name}")
         print(f"   ✓ Size: {zip_path.stat().st_size / 1024 / 1024:.2f} MB")
@@ -125,6 +127,7 @@ class ForgeBuilder:
                     'md5': hashlib.md5(f.read()).hexdigest(),
                     'size': file.stat().st_size
                 }
+            checksums[file.name]['sha256'] = hashlib.sha256(file.read_bytes()).hexdigest()
         
         checksum_file = self.dist_dir / "checksums.json"
         with open(checksum_file, 'w') as f:
@@ -133,6 +136,16 @@ class ForgeBuilder:
         print(f"   ✓ Checksums saved to {checksum_file}")
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source-only", action="store_true",
+                        help="Package the Python prototype; does not build an OS or editor")
+    args = parser.parse_args()
     builder = ForgeBuilder()
-    success = builder.build_all()
+    if args.source_only:
+        builder.create_distribution()
+        builder.generate_checksums()
+        success = True
+    else:
+        success = builder.build_all()
     sys.exit(0 if success else 1)

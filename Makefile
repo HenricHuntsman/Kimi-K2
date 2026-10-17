@@ -1,78 +1,41 @@
-# THE FORGE - Master Makefile
-# Builds entire project across all languages
-
-.PHONY: all build test clean install dist
-
-# Detect OS
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-    OS = linux
-endif
-ifeq ($(UNAME_S),Darwin)
-    OS = macos
-endif
-
-# Build configuration
-BUILD_DIR = build
-DIST_DIR = dist
-VERSION = 1.0.0
+# FORGE Python demonstration prototype
+.PHONY: all setup build test clean install dist run-gui run-server run-cli help
 
 all: build
 
 setup:
-	@echo "🔥 Setting up THE FORGE build environment..."
-	@mkdir -p $(BUILD_DIR) $(DIST_DIR)
-	@pip3 install -q Flask Flask-CORS Pillow 2>/dev/null || true
-	@echo "✅ Setup complete"
+	python3 -m pip install -r requirements.txt
 
-build: setup
-	@echo "🔨 Building THE FORGE..."
-	@python3 build_system.py
-	@echo "✅ Build complete"
+# Full media/OS build remains unimplemented and returns nonzero.
+build:
+	python3 build_system.py
 
 test:
-	@echo "🧪 Testing THE FORGE..."
-	@python3 -m py_compile *.py
-	@python3 -m unittest discover -s tests -v
-	@echo "✅ Tests passed"
+	python3 -m py_compile *.py
+	python3 -m unittest discover -s tests -v
 
 clean:
-	@echo "🧹 Cleaning build artifacts..."
-	@rm -rf $(BUILD_DIR) $(DIST_DIR)
-	@rm -rf __pycache__ *.pyc
-	@echo "✅ Clean complete"
+	rm -rf build dist __pycache__ tests/__pycache__
 
-install: build
-	@echo "📦 Installing THE FORGE..."
-	@echo "✅ Installation complete"
+install:
+	@echo "No system installer is implemented. Create a virtual environment and use make setup."
+	@exit 1
 
-dist: build
-	@echo "📦 Creating distribution..."
-	@cd $(DIST_DIR) && ls -lh
-	@echo "✅ Distribution ready"
+# An explicitly labelled source bundle, not an installer or bootable ISO.
+dist:
+	python3 build_system.py --source-only
 
 run-gui:
-	@echo "🎨 Starting THE FORGE GUI..."
-	@python3 forge_gui.py
+	python3 forge_gui.py
 
 run-server:
-	@echo "🚀 Starting THE FORGE Server..."
-	@python3 forge_server.py
+	python3 forge_server.py
 
 run-cli:
-	@echo "💻 Starting THE FORGE CLI..."
-	@python3 forge_cli.py
+	python3 forge_cli.py
 
 help:
-	@echo "THE FORGE - Build System"
-	@echo ""
-	@echo "Available targets:"
-	@echo "  make all       - Build everything"
-	@echo "  make build     - Build THE FORGE"
-	@echo "  make test      - Run tests"
-	@echo "  make clean     - Clean build artifacts"
-	@echo "  make install   - Install THE FORGE"
-	@echo "  make dist      - Create distribution"
-	@echo "  make run-gui   - Start GUI"
-	@echo "  make run-server - Start server"
-	@echo "  make run-cli   - Start CLI"
+	@echo "setup: install demo dependencies into your active environment"
+	@echo "test: syntax and regression checks; dist: prototype source ZIP"
+	@echo "run-cli / run-gui / run-server: start demonstration interfaces"
+	@echo "build and install: incomplete, return nonzero"

@@ -1,74 +1,49 @@
 # FORGE Integration Lab — Kimi K2
 
-A prototype lab containing Python documentation loaders, prompt/config exporters, a Flask demonstration UI, and a simulated model/tool integration. Repository slug: `Kimi-K2`.
+A Python prototype for loading documentation, exporting prompts/configuration, and exploring demonstration CLI and Flask interfaces. **Stage: prototype.** It does not load a Kimi checkpoint or execute the advertised media/OS tools. It is independent of [Moonshot AI's Kimi-K2](https://github.com/moonshotai/Kimi-K2).
 
-**Stage: prototype.** The current wrapper does not load or run a Kimi K2 checkpoint. Upstream Kimi K2 is a separate Moonshot AI model; its parameter counts and published benchmarks are not results produced by this repository.
+## Run and check
 
-## What is present
+Use Python 3.11 or 3.14, as in CI:
 
-| Component | Source-derived behavior |
-| --- | --- |
-| Documentation and prompt export | `forge_implementation.py` loads Markdown and constructs prompts/configuration |
-| Simulated model | `KimiK2Model.generate` in `kimi_forge_unified.py` builds a canned response and selects tools by keywords |
-| Simulated tools | `ForgeToolRegistry.execute_tool` returns an explicit nonexecution result; it does not invoke the listed media/OS implementations |
-| Demonstration UI | `forge_gui.py` labels the demo and returns explicit unavailable-tool results |
-| Source packaging | `build_system.py` creates a ZIP and checksums; its unimplemented video-editor and Linux-OS steps now fail explicitly |
-| Improvement estimates | `kimi_enhancement_toolkit.py` uses hard-coded estimated gains, not measured benchmark runs |
+~~~bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements.txt
+make test
+python forge_cli.py
+# Alternative demonstration interfaces:
+python forge_gui.py
+python forge_server.py
+~~~
 
-**A source ZIP is not a bootable Linux ISO.** No bootable distribution, professional video editor, ten-million-film database, 1,450 working tools, trained Kimi model, or measured benchmark gain is established by this code review. The earlier advertised counts and completion percentages are withdrawn as project-status claims.
+Run one interface at a time. Both Flask entry points default to loopback; these are development demos, without production authentication qualification.
 
-## Inspect without starting services
+## What works and what remains
 
-Requires Python 3 for source inspection:
+| Component | Verified scope | Remaining work |
+| --- | --- | --- |
+| Documentation loader | Markdown loading, prompt/config export | Reconcile historical claims in prompt inputs |
+| CLI | Basic history, modes, stats and capabilities responses | Real local model adapter |
+| Flask GUI and legacy REST API | Tested demo routes, input validation, explicit unavailable-tool results | Real inference, tool execution and deployment qualification |
+| Source packaging | Includes Python, dependencies, UI assets, tests and nested documentation; SHA-256 manifest | Fresh-environment installation and desktop packaging qualification |
+| Model/tool integration | Explicit simulation; zero executable registered tools | Implement and test one local model/tool workflow |
+| Linux OS/video editor | Explicitly unimplemented | Separate implementations and end-to-end tests |
 
-```bash
-git clone https://github.com/HenricHuntsman/Kimi-K2.git
-cd Kimi-K2
-python3 -m py_compile *.py
-```
+The expanded suite has **22 local passing tests**, including archive contents, omitted cache/hidden files, missing inputs and checksum verification. Previous hosted CI passed 19 tests; see Actions for the expanded suite's result. These checks do not establish inference, a professional editor, a bootable OS or measured benchmark gains. Enhancement-toolkit gains remain hard-coded estimates.
 
-This checks syntax only. It does not run inference or validate application behavior. The demonstration Flask server now binds to `127.0.0.1` with debug disabled. It remains a development demo; authentication, dependencies and deployment still need qualification.
+## Package the prototype sources
 
-## What remains
+~~~bash
+make dist
+~~~
 
-- Replace simulation with one explicit, local model adapter and report unavailable inference accurately.
-- Implement and test one real tool before expanding the catalogue.
-- Replace fixed success/quality outputs with measured results or explicit demo labels in the runtime.
-- Validate dependency installation, routes, error handling and localhost binding.
-- Use held-out benchmark runs before reporting improvement numbers.
-- Treat Linux-distribution creation as a separate unimplemented proposal.
-- Test packaging and installation before a beta or release-candidate label.
+This writes a clearly labelled prototype source ZIP and checksums under dist/. It is not an installer or ISO. Unimplemented full builds and system installation return nonzero; dependency installation errors propagate. The original source-packaging omissions are repaired in this pass.
 
-## Documentation and provenance
+## Files and history
 
-[Earlier README](README.legacy.md) and older design documents are retained for provenance. They contain unverified claims; this README describes the current qualification status. Documentation text is also consumed by the prompt loader, so historical claims in those inputs still need reconciliation.
+[Folder guide](docs/PROJECT-GUIDE.md) · [Earlier functional audit](docs/FUNCTIONAL-AUDIT-2026-10-18.md) · [Historical README](README.legacy.md) · [Licence](LICENSE).
 
-Upstream model reference: [Moonshot AI / Kimi-K2](https://github.com/moonshotai/Kimi-K2). Preserve the existing [LICENSE](LICENSE), upstream authorship and model terms. This lab is not an official Moonshot release.
+The earlier audit records failures subsequently repaired; use this README and current tests for present behaviour. Root Python files are active; templates/ and static/ hold UI assets; tests/ holds checks. docs/*.md and README.md are prompt-loader inputs. Unimplemented Rust/C++/Go manifests are preserved under docs/design-manifests/. Older capability counts, completion percentages and quality scores are not verified results.
 
-*Reviewed 18 October 2026. Source inspection and archive-integrity checks do not establish model/runtime qualification.*
-
-## Prototype integrity checks
-
-The model wrapper now labels responses as demonstrations, reports no loaded checkpoint, leaves confidence unset, and marks tool results `not_implemented` with `executed: false`. Registry definitions are counted separately from executable tools. `build_all` fails on unimplemented video/OS work and does not publish a source ZIP as a completed full build.
-
-`make test` runs syntax checks and six regression tests, and propagates failures. These tests passed locally and failed against the old implementation; a malformed-source check also returned nonzero. A Python 3.11/3.14 workflow has been added. This does not implement inference, media editing or Linux image creation. Benchmark estimates and older server/template paths still need reconciliation.
-
-## Web-demo integrity follow-up
-
-The GUI now reads documentation through the real loader API, reports zero implemented capabilities, identifies chat as a demo echo, returns HTTP 501 for known unimplemented tools and 404 for unknown tools, and rejects malformed chat payloads with HTTP 400. No code-review scores, upscaling gains or video-edit completion are fabricated. Its startup entry binds to loopback without debug.
-
-Install Flask before running `make test` (for example in a virtual environment with `python -m pip install Flask==3.1.2`). The combined suite passes 12 tests locally, including route and startup-configuration checks. The original GUI failed the new route checks. These are synthetic/local tests, not live inference or production-server qualification.
-
-## Direct functional audit
-
-[Executed audit — 18 October 2026](docs/FUNCTIONAL-AUDIT-2026-10-18.md): documentation, prompt/config export, basic CLI history and source-ZIP packaging work within their stated limits. CLI `/stats` and `/caps` and two older REST endpoints fail on a missing API. Node build fails because its entry point is absent; `npm test` only prints a success message. These remain repair tasks, not working features.
-
-## Recovery pass: CLI/REST and component separation
-
-The audit above is a historical snapshot. `/stats` and `/caps` now use the actual documentation API; legacy REST statistics, capabilities and documentation routes no longer call nonexistent methods. Chat explicitly reports a demonstration; text-analysis routes retain basic counts/keyword checks without invented quality scores or sequel predictions. The legacy server now defaults to loopback.
-
-`npm test` now runs the real Python suite (install Flask and Flask-CORS in your active environment first). `npm run build` and `npm start` explicitly report that no Node application is implemented. Rust/C++/Go manifests are preserved under `docs/design-manifests/`, separate from the runnable Python prototype. Nineteen local tests passed through `make test`; real inference remains unimplemented.
-
-## Folder organisation and recovery
-
-See the [project and folder guide](docs/PROJECT-GUIDE.md) for preserved material, verified limits and the next milestone.
+Updated 18 October 2026. No RC/RTM qualification.
