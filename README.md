@@ -10,7 +10,7 @@ A prototype lab containing Python documentation loaders, prompt/config exporters
 | --- | --- |
 | Documentation and prompt export | `forge_implementation.py` loads Markdown and constructs prompts/configuration |
 | Simulated model | `KimiK2Model.generate` in `kimi_forge_unified.py` builds a canned response and selects tools by keywords |
-| Simulated tools | `ForgeToolRegistry.execute_tool` returns a success-shaped dictionary; it does not invoke the listed media/OS implementations |
+| Simulated tools | `ForgeToolRegistry.execute_tool` returns an explicit nonexecution result; it does not invoke the listed media/OS implementations |
 | Demonstration UI | `forge_gui.py` contains fixed code-review, book-analysis and upscaling result strings |
 | Source packaging | `build_system.py` creates a ZIP and checksums; its unimplemented video-editor and Linux-OS steps now fail explicitly |
 | Improvement estimates | `kimi_enhancement_toolkit.py` uses hard-coded estimated gains, not measured benchmark runs |
