@@ -11,7 +11,7 @@ A prototype lab containing Python documentation loaders, prompt/config exporters
 | Documentation and prompt export | `forge_implementation.py` loads Markdown and constructs prompts/configuration |
 | Simulated model | `KimiK2Model.generate` in `kimi_forge_unified.py` builds a canned response and selects tools by keywords |
 | Simulated tools | `ForgeToolRegistry.execute_tool` returns an explicit nonexecution result; it does not invoke the listed media/OS implementations |
-| Demonstration UI | `forge_gui.py` contains fixed code-review, book-analysis and upscaling result strings |
+| Demonstration UI | `forge_gui.py` labels the demo and returns explicit unavailable-tool results |
 | Source packaging | `build_system.py` creates a ZIP and checksums; its unimplemented video-editor and Linux-OS steps now fail explicitly |
 | Improvement estimates | `kimi_enhancement_toolkit.py` uses hard-coded estimated gains, not measured benchmark runs |
 
@@ -27,7 +27,7 @@ cd Kimi-K2
 python3 -m py_compile *.py
 ```
 
-This checks syntax only. It does not run inference or validate application behavior. The demonstration Flask servers have not been qualified for deployment; `forge_gui.py` currently starts with debug enabled on all interfaces. Review binding, authentication and dependencies before running it on a network.
+This checks syntax only. It does not run inference or validate application behavior. The demonstration Flask server now binds to `127.0.0.1` with debug disabled. It remains a development demo; authentication, dependencies and deployment still need qualification.
 
 ## What remains
 
@@ -51,4 +51,10 @@ Upstream model reference: [Moonshot AI / Kimi-K2](https://github.com/moonshotai/
 
 The model wrapper now labels responses as demonstrations, reports no loaded checkpoint, leaves confidence unset, and marks tool results `not_implemented` with `executed: false`. Registry definitions are counted separately from executable tools. `build_all` fails on unimplemented video/OS work and does not publish a source ZIP as a completed full build.
 
-`make test` runs syntax checks and six regression tests, and propagates failures. These tests passed locally and failed against the old implementation; a malformed-source check also returned nonzero. A Python 3.11/3.14 workflow has been added. This does not implement inference, media editing or Linux image creation. Other demonstration GUI result strings and benchmark estimates still need reconciliation.
+`make test` runs syntax checks and six regression tests, and propagates failures. These tests passed locally and failed against the old implementation; a malformed-source check also returned nonzero. A Python 3.11/3.14 workflow has been added. This does not implement inference, media editing or Linux image creation. Benchmark estimates and older server/template paths still need reconciliation.
+
+## Web-demo integrity follow-up
+
+The GUI now reads documentation through the real loader API, reports zero implemented capabilities, identifies chat as a demo echo, returns HTTP 501 for known unimplemented tools and 404 for unknown tools, and rejects malformed chat payloads with HTTP 400. No code-review scores, upscaling gains or video-edit completion are fabricated. Its startup entry binds to loopback without debug.
+
+Install Flask before running `make test` (for example in a virtual environment with `python -m pip install Flask==3.1.2`). The combined suite passes 12 tests locally, including route and startup-configuration checks. The original GUI failed the new route checks. These are synthetic/local tests, not live inference or production-server qualification.

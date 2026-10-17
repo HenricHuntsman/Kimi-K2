@@ -20,7 +20,7 @@ async function startSplashSequence() {
     await updateProgress(35, 'Knowledge Base Loaded...');
     
     await activateStatus(3, 'status3', 600);
-    await updateProgress(55, 'Capabilities Activated...');
+    await updateProgress(55, 'Demonstration loaded; no tools activated');
     
     await activateStatus(4, 'status4', 700);
     await updateProgress(75, '16GB KING Configuration Ready...');
@@ -39,7 +39,7 @@ async function startSplashSequence() {
 
 function animateStats() {
     // Capabilities counter
-    animateCounter('capabilitiesLoading', 0, 865, 2000);
+    animateCounter('capabilitiesLoading', 0, 0, 2000);
     
     // Documents counter
     animateCounter('documentsLoading', 0, 15, 1500);
