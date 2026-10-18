@@ -170,6 +170,19 @@ class LocalOllamaTests(unittest.TestCase):
             self.assertNotIn('message', failure.get_json())
             self.assertFalse(failure.get_json()['inference_verified'])
 
+    def test_smoke_report_measures_one_request_and_does_not_claim_model_quality(self):
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(main(['--endpoint', self.endpoint, '--smoke']), 2)
+        report = json.loads(output.getvalue())
+        self.assertEqual(report['status'], 'smoke_mismatch')
+        self.assertFalse(report['model_quality_verified'])
+        self.assertEqual(report['tools_executed'], 0)
+        self.assertGreaterEqual(report['request_elapsed_seconds'], 0)
+        self.answer['message']['content'] = 'FORGE_LOCAL_OK'
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(main(['--endpoint', self.endpoint, '--smoke']), 0)
+        self.assertEqual(json.loads(output.getvalue())['status'], 'smoke_passed')
+
 
 if __name__ == '__main__':
     unittest.main()

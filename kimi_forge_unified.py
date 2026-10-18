@@ -181,7 +181,7 @@ class KimiForgeUnified:
     """
     THE FORGE ❤️ KIMI K2: The Unified System
     
-    Combines Kimi K2's world-class AI with THE FORGE's practical capabilities.
+    Simulates model responses and illustrative tool selection; no inference or tools execute.
     """
     
     def __init__(self, config: Optional[Dict] = None):
@@ -311,7 +311,7 @@ class KimiForgeUnified:
         
         if benchmark in benchmark_configs:
             self.config.update(benchmark_configs[benchmark])
-            logger.info(f"🎯 Optimized for {benchmark} benchmark")
+            logger.info(f"Demo preset selected: {benchmark}; no benchmark improvement measured")
         
         return self
 

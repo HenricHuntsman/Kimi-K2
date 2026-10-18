@@ -21,4 +21,4 @@ The loader replaces state on reload and keeps docs/README.md separate from root 
 
 Source packaging includes the local adapter, dependencies, current UI, tests and nested docs with SHA-256 checksums. It remains a source bundle, not an installer or Linux ISO. The old tracked dist ZIP was moved to archive/source-bundles/.
 
-35 Python and two Node tests passed locally; Ollama coverage uses a loopback HTTP fixture. No live Qwen/GPU or actual desktop browser qualification was performed. Full Linux/media builds remain explicit failures. See the [local model guide](local-models/README.md) for the next real-inference check.
+41 Python and two Node tests passed locally; Ollama coverage uses a loopback HTTP fixture. No live Qwen/GPU or actual desktop browser qualification was performed. Full Linux/media builds remain explicit failures. See the [local model guide](local-models/README.md) for the next real-inference check.

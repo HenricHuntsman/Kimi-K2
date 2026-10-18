@@ -30,9 +30,9 @@ See the [local Qwen guide](docs/local-models/README.md) for server policy, comma
 | Default GUI / legacy CLI / forge_server.py | Demonstrations; not model inference |
 | Documentation loader | Markdown loading and prompt/config export; historical text is not executable capability |
 | Source bundle | `make dist` includes dependencies, UI, tests and nested docs with checksums; not an installer or ISO |
-| Linux OS, media tools, benchmark gains | OS/media builds unimplemented; enhancement estimates remain illustrative |
+| Linux OS, media tools, benchmark gains | OS/media builds unimplemented; training exports are unavailable and gains are not measured |
 
-**35 Python tests and two frontend tests passed locally**, using a loopback HTTP fixture for Ollama. No live Qwen inference was possible here because Ollama was unreachable. GPU performance, production checkpoints, browser operation and installation remain unqualified; check Actions for hosted results.
+**41 Python tests and two frontend tests passed locally**, using a loopback HTTP fixture for Ollama. No live Qwen inference was possible here because Ollama was unreachable. GPU performance, production checkpoints, browser operation and installation remain unqualified; check Actions for hosted results.
 
 The GUI now uses local assets, explicit backend status and plain-text answers. Invented skill counts, neural-loading animations and 16GB performance claims were removed. Model responses are advice, not executed actions.
 
@@ -43,3 +43,9 @@ The GUI now uses local assets, explicit backend status and plain-text answers. I
 Older project notes, the promotional UI and the old source ZIP are preserved under archive/. Fresh output belongs in ignored dist/ and build/ folders. The historical knowledge JSON and docs remain reference material and are not automatically sent to Qwen. Exported configuration is labelled design-only until configured for an actual runtime. No RC/RTM release is established.
 
 Updated 18 October 2026.
+
+## Training and measurement follow-up
+
+The active enhancement helpers no longer invent benchmark gains or export category descriptions as training examples. Baselines remain caller-reported and unverified; measured scores and gains stay null until a real evaluation is implemented. Dataset extraction raises NotImplementedError. The generated training configuration is explicitly design-only. Originals are retained as text under archive/design-scripts/.
+
+For one real local inference check, run `python forge_local.py --smoke --model qwen2.5-coder:7b`. The JSON report records request elapsed time and an exact-response check. Exit 0 means the marker matched, exit 2 means a completed answer differed, and exit 1 means a configuration/transport/model error. A passing smoke check is not proof of model quality, GPU performance or tool execution. The prior local-adapter commit passed hosted Python 3.11/3.14 and Node checks; consult Actions for this follow-up's result.

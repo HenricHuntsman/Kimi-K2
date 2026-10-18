@@ -38,6 +38,14 @@ Optional client settings: FORGE_OLLAMA_URL (loopback HTTP only; default http://1
 
 ## Evidence and remaining checks
 
-35 Python tests and two Node frontend tests passed locally. Tests use a real loopback HTTP fixture, not an actual Qwen model. They cover native request shape, policy refusal before prompt transmission, remote metadata rejection, redirects, proxy bypass, timeouts, response limits, CLI/GUI routing and visible frontend errors. Prompt exports no longer invent a Kimi identity or persistent learning. A repeated documentation load replaces old state rather than duplicating it.
+41 Python tests and two Node frontend tests passed locally. Tests use a real loopback HTTP fixture, not an actual Qwen model. They cover native request shape, policy refusal before prompt transmission, remote metadata rejection, redirects, proxy bypass, timeouts, response limits, CLI/GUI routing and visible frontend errors. Prompt exports no longer invent a Kimi identity or persistent learning. A repeated documentation load replaces old state rather than duplicating it.
 
 Ollama was unreachable in this hosted workspace. Actual Qwen output, token speed, context behaviour, GPU use and desktop browser operation remain unverified. Next qualification is a successful prompt on your existing local server, followed by an interactive CLI and browser smoke test. The adapter follows [Ollama's native chat API](https://github.com/ollama/ollama/blob/main/docs/api.md) and [status/model response contracts](https://github.com/ollama/ollama/blob/main/api/types.go).
+
+## Run a measured local smoke check
+
+```bash
+python forge_local.py --smoke --model qwen2.5-coder:7b
+```
+
+This sends only a fixed request for FORGE_LOCAL_OK. It prints JSON containing the actual answer, requested backend's returned model name, client request elapsed time and exact-match result. Exit 0 is a match; exit 2 is a completed but different answer; exit 1 is an error. Elapsed time includes policy/metadata checks and any model loading, so it is not token throughput. No files are written automatically. This is a connectivity/inference smoke check, not a quality benchmark. Tests exercise match and mismatch using the protocol fixture; real local inference remains to be run on your server.

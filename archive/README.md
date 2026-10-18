@@ -19,3 +19,7 @@ Moved on 18 October 2026. These files retain their original blobs and Git histor
 - source-bundles/ preserves the original 2025 source ZIP and its old checksum file. No ISO or installer is established by that archive; checksum metadata is retained as historical input, not revalidated release evidence.
 
 Fresh generated output belongs under ignored dist/ and build/. These archives are excluded from the prototype source bundle. See the [current README](../README.md) and [local Qwen guide](../docs/local-models/README.md).
+
+## Withdrawn training/benchmark proposals
+
+The original kimi_enhancement_toolkit.py and kimi_forge_integration.py are preserved byte-for-byte as .py.txt under design-scripts/. They contained unmeasured benchmark gains, source/capability counts, category descriptions presented as training examples, and unsupported fine-tuning instructions. They are historical text, not an executable training workflow. Current root modules return unknown results/design status or explicit NotImplementedError. No fine-tuning, model improvement or benchmark result is established by either version.

@@ -8,6 +8,7 @@ import math
 import os
 import re
 import sys
+import time
 from http.client import HTTPException
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
@@ -130,13 +131,31 @@ def main(argv=None):
     parser.add_argument("--model", default=os.environ.get("FORGE_OLLAMA_MODEL", "qwen2.5-coder:7b"))
     parser.add_argument("--endpoint", default=os.environ.get("FORGE_OLLAMA_URL", "http://127.0.0.1:11434"))
     parser.add_argument("--timeout", default=os.environ.get("FORGE_OLLAMA_TIMEOUT", "120"))
-    parser.add_argument("--check", action="store_true", help="Check server policy/model metadata without inference")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--check", action="store_true", help="Check server policy/model metadata without inference")
+    mode.add_argument("--smoke", action="store_true", help="Run one fixed local inference check and print a JSON report")
     args = parser.parse_args(argv)
+    if args.prompt is not None and (args.check or args.smoke):
+        parser.error('Do not combine a prompt with --check or --smoke')
     try:
         client = LocalOllama(args.model, args.endpoint, args.timeout)
         if args.check:
             print(json.dumps(client.check_local()))
             return 0
+        if args.smoke:
+            expected = 'FORGE_LOCAL_OK'
+            started = time.perf_counter()
+            result = client.chat([{'role': 'user', 'content': f'Reply with exactly: {expected}'}])
+            passed = result['message'].strip() == expected
+            print(json.dumps({
+                'status': 'smoke_passed' if passed else 'smoke_mismatch',
+                'backend': result['backend'], 'model': result['model'],
+                'expected': expected, 'answer': result['message'],
+                'request_elapsed_seconds': time.perf_counter() - started,
+                'inference_verified': True, 'tools_executed': 0,
+                'model_quality_verified': False
+            }, indent=2))
+            return 0 if passed else 2
         if args.prompt is not None:
             print(client.chat([{"role": "user", "content": args.prompt}])["message"])
             return 0
