@@ -1,18 +1,19 @@
 {
   "name": "the-forge-ai",
   "version": "1.0.0",
-  "description": "Python documentation/export lab with demonstration interfaces; Node application unimplemented",
+  "description": "Python prototype with opt-in local Ollama/Qwen chat and explicit demo interfaces",
   "scripts": {
     "build": "node -e \"console.error('Node application not implemented; use Python commands in README.md'); process.exit(1)\"",
     "start": "node -e \"console.error('Node application not implemented; use Python commands in README.md'); process.exit(1)\"",
-    "test": "python3 -m unittest discover -s tests -v"
+    "test": "python3 -m unittest discover -s tests -v",
+    "test:ui": "node --test tests/frontend.test.cjs"
   },
   "keywords": [
-    "ai",
-    "creative",
-    "video-editor",
-    "code-editor",
-    "book-writer"
+    "prototype",
+    "ollama",
+    "qwen",
+    "local-chat",
+    "documentation"
   ],
   "author": "THE FORGE Team",
   "license": "MIT"

@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Prototype source packaging; full media/OS builds remain unimplemented."""
 
-import os
 import sys
-import subprocess
 import zipfile
 import json
 from pathlib import Path
@@ -86,7 +84,7 @@ class ForgeBuilder:
     def create_distribution(self):
         """Package prototype sources, dependencies and UI assets, not an OS."""
         required = ["forge_implementation.py", "forge_server.py", "forge_cli.py",
-                    "forge_gui.py", "requirements.txt", "README.md", "LICENSE"]
+                    "forge_gui.py", "forge_local.py", "requirements.txt", "README.md", "LICENSE"]
         for name in required:
             if not (self.project_root / name).is_file():
                 raise FileNotFoundError(f"Required package input missing: {name}")

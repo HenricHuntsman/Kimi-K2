@@ -3,3 +3,9 @@ __pycache__/
 *.py[cod]
 .venv/
 .pytest_cache/
+
+# Local credentials and generated prototype output
+.env
+.env.*
+/dist/
+/build/

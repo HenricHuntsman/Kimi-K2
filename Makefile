@@ -1,5 +1,5 @@
 # FORGE Python demonstration prototype
-.PHONY: all setup build test clean install dist run-gui run-server run-cli help
+.PHONY: all setup build test test-ui clean install dist run-gui run-server run-cli help
 
 all: build
 
@@ -13,6 +13,10 @@ build:
 test:
 	python3 -m py_compile *.py
 	python3 -m unittest discover -s tests -v
+
+test-ui:
+	node --check static/js/app.js
+	node --test tests/frontend.test.cjs
 
 clean:
 	rm -rf build dist __pycache__ tests/__pycache__

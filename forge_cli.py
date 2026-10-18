@@ -39,6 +39,7 @@ class ForgeCLI:
         """Print welcome message"""
         print("=" * 70)
         print("🔥 THE FORGE AI - Interactive CLI")
+        print("Documentation demo. For local Qwen: python forge_cli.py --local")
         print("=" * 70)
         print()
         print("Available commands:")
@@ -268,9 +269,13 @@ class ForgeCLI:
 
 def main():
     """Main entry point"""
+    if len(sys.argv) > 1 and sys.argv[1] == '--local':
+        from forge_local import main as local_main
+        return local_main(sys.argv[2:])
     cli = ForgeCLI()
     cli.run()
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

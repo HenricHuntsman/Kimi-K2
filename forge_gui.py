@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
-"""Local demonstration UI; no model inference or executable tools are implemented."""
+"""Demonstration UI with an explicit opt-in local Ollama chat backend."""
 
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from forge_implementation import ForgeAI
+from forge_local import LocalOllama, LocalModelError
 import os
-import json
 from datetime import datetime
 
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 256 * 1024
 forge = None
+
+
+def configured_backend():
+    backend = os.environ.get('FORGE_BACKEND', 'demo')
+    if backend not in ('demo', 'ollama'):
+        raise LocalModelError('FORGE_BACKEND must be demo or ollama')
+    return backend
 
 # Initialize THE FORGE
 def init_forge():
@@ -27,16 +35,24 @@ def index():
 def api_init():
     """Initialize THE FORGE and return stats"""
     init_forge()
+    try:
+        backend = configured_backend()
+        model = LocalOllama.from_environment().model if backend == 'ollama' else None
+    except LocalModelError as error:
+        return jsonify({'error': str(error)}), 503
     
     stats = {
         'total_capabilities': 0,
         'documents_loaded': len(forge.loader.documents),
         'total_characters': sum(len(content) for content in forge.loader.documents.values()),
         'categories': [],
-        'status': 'demonstration',
-        'model_loaded': False,
+        'status': 'demonstration' if backend == 'demo' else 'local_model_configured',
+        'backend': backend,
+        'model': model,
+        'inference_verified': False,
+        'model_loaded': False if backend == 'demo' else None,
         'version': '1.0.0',
-        'name': 'FORGE Integration Lab — Demo'
+        'name': 'FORGE Local Chat Lab'
     }
     
     return jsonify(stats)
@@ -57,9 +73,20 @@ def api_chat():
     if not isinstance(data, dict) or not isinstance(data.get('message'), str):
         return jsonify({'error': 'message must be a string'}), 400
     message = data['message']
+    if not message.strip():
+        return jsonify({'error': 'message must not be empty'}), 400
     mode = data.get('mode', 'chat')
     if not isinstance(mode, str):
         return jsonify({'error': 'mode must be a string'}), 400
+    try:
+        backend = configured_backend()
+        if backend == 'ollama':
+            response = LocalOllama.from_environment().chat([{'role': 'user', 'content': message}])
+            response.update(mode=mode, timestamp=datetime.now().isoformat())
+            return jsonify(response)
+    except LocalModelError as error:
+        return jsonify({'error': str(error), 'backend': 'ollama',
+                        'inference_verified': False, 'capabilities_used': []}), 503
     
     # Generate response based on mode
     response = {
@@ -95,7 +122,7 @@ def api_skills():
     
     return jsonify({'total': 0, 'demo': True, 'implemented': False})
 
-@app.route('/api/documentation/<doc_name>', methods=['GET'])
+@app.route('/api/documentation/<path:doc_name>', methods=['GET'])
 def api_documentation(doc_name):
     """Get specific documentation"""
     init_forge()
@@ -127,6 +154,6 @@ if __name__ == '__main__':
     
     print("🔥 Starting THE FORGE GUI...")
     print("📍 Open http://localhost:5000 in your browser")
-    print("Demonstration only: no model loaded and no tools execute.")
+    print("Backend: " + os.environ.get('FORGE_BACKEND', 'demo') + "; no tools execute.")
     
     app.run(debug=False, host='127.0.0.1', port=5000)

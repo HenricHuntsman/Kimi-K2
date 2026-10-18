@@ -60,6 +60,15 @@ class GuiIntegrityTests(unittest.TestCase):
         self.assertEqual(self.client.get('/api/capabilities').get_json(), {})
         self.assertEqual(self.client.get('/api/skills').get_json()['total'], 0)
 
+    def test_page_uses_local_assets_and_marks_independent_text_chat(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        page = response.get_data(as_text=True)
+        self.assertIn('Each message is independent', page)
+        self.assertNotIn('https://', page)
+        self.assertNotIn('16GB OPTIMIZED', page)
+        self.assertNotIn('splash.js', page)
+
     def test_development_entry_point_binds_loopback_without_debug(self):
         with patch('flask.Flask.run') as run, contextlib.redirect_stdout(io.StringIO()):
             runpy.run_module('forge_gui', run_name='__main__')

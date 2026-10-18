@@ -14,7 +14,7 @@ class SourcePackagingTests(unittest.TestCase):
         builder.project_root = Path(directory)
         builder.dist_dir = Path(directory) / 'dist'
         for name in ('forge_implementation.py', 'forge_server.py', 'forge_cli.py',
-                     'forge_gui.py', 'requirements.txt', 'README.md', 'LICENSE',
+                     'forge_gui.py', 'forge_local.py', 'requirements.txt', 'README.md', 'LICENSE',
                      'templates/index.html', 'static/app.js', 'docs/nested/guide.md',
                      'tests/test_example.py', '.env', 'tests/__pycache__/test.pyc',
                      'static/.env', 'node_modules/secret.txt'):
